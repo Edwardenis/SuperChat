@@ -10,10 +10,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SuperChat.Core.ConfigModels;
+using SuperChat.Core.IoC;
 using SuperChat.Datamodel;
 using SuperChat.Datamodel.Contexts;
 using SuperChat.Datamodel.Entities;
+using SuperChat.Datamodel.IoC;
 using SuperChat.Identity;
+using SuperChat.Services.IoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +41,11 @@ namespace SuperChat
             services.AddTransient<SuperChatDbContext>();
             //Custom Claim factory
             services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AppClaimsPrincipalFactory>();
+            //
+            services.AddCoreRegistry();
+            services.AddDatamodelRegistry();
+            services.AddServicesRegistry();
+
             #endregion
 
             #region DbContext Config
@@ -51,38 +59,6 @@ namespace SuperChat
                 .AddEntityFrameworkStores<SuperChatDbContext>()
                 .AddDefaultTokenProviders();
 
-            //services.AddIdentity<AppUser, IdentityRole>(o => {
-            //    o.User.RequireUniqueEmail = true;
-            //    o.Password.RequireDigit = false;
-            //    o.Password.RequireLowercase = false;
-            //    o.Password.RequireUppercase = false;
-            //    o.Password.RequireNonAlphanumeric = false;
-            //    o.Password.RequiredLength = 5;
-            //    o.Lockout.DefaultLockoutTimeSpan = new System.TimeSpan(0, 5, 0);
-            //    o.Lockout.MaxFailedAccessAttempts = 5;
-            //})
-            //.AddEntityFrameworkStores<SuperChatDbContext>()
-            //.AddDefaultTokenProviders();
-
-            //var authenticationSettings = Configuration.GetSection("AuthenticationConfig").Get<AuthenticationSettings>();
-            //services.AddAuthentication(x =>
-            //{
-            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(x =>
-            //{
-            //    x.RequireHttpsMetadata = false;
-            //    x.SaveToken = true;
-            //    x.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(authenticationSettings.Secret)),
-            //        ValidIssuer = authenticationSettings.Issuer,
-            //        ValidAudience = authenticationSettings.Audience,
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false
-            //    };
-            //});
             services.AddAuthorization();
             #endregion
             

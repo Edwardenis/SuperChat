@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperChat.Core", "SuperChat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperChat.API", "SuperChat.API\SuperChat.API.csproj", "{5376AC95-A8D2-41D0-AC6D-EEA2DCFBFDC8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperChat.Services", "SuperChat.Services\SuperChat.Services.csproj", "{C32976B7-9922-42FC-A6F8-66857B3382B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5376AC95-A8D2-41D0-AC6D-EEA2DCFBFDC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5376AC95-A8D2-41D0-AC6D-EEA2DCFBFDC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5376AC95-A8D2-41D0-AC6D-EEA2DCFBFDC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C32976B7-9922-42FC-A6F8-66857B3382B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C32976B7-9922-42FC-A6F8-66857B3382B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C32976B7-9922-42FC-A6F8-66857B3382B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C32976B7-9922-42FC-A6F8-66857B3382B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

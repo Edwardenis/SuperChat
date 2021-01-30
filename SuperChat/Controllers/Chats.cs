@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SuperChat.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace SuperChat.Controllers
         // GET: Chats
         public ActionResult Index()
         {
+            var token = User.Identity.GetToken();
+
             return View();
         }
 

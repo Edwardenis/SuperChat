@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SuperChat.Core.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -12,6 +13,13 @@ namespace SuperChat.Identity
         public static string FullName(this IIdentity identity)
         {
             var claim = ((ClaimsIdentity)identity).FindFirst(ClaimTypes.GivenName);
+            // Test for null to avoid issues during local testing
+            return (claim != null) ? claim.Value : string.Empty;
+        }
+
+        public static string GetToken(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst(CustomClaimTypes.JwtToken);
             // Test for null to avoid issues during local testing
             return (claim != null) ? claim.Value : string.Empty;
         }
