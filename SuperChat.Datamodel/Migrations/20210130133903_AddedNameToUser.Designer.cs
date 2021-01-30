@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SuperChat.Datamodel;
+using SuperChat.Datamodel.Contexts;
 
 namespace SuperChat.Datamodel.Migrations
 {

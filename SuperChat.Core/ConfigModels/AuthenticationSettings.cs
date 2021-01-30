@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SuperChat.Models.Configs
+namespace SuperChat.Core.ConfigModels
 {
     public class AuthenticationSettings
     {

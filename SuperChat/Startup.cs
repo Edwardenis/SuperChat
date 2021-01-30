@@ -9,10 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using SuperChat.Core.ConfigModels;
 using SuperChat.Datamodel;
+using SuperChat.Datamodel.Contexts;
 using SuperChat.Datamodel.Entities;
 using SuperChat.Identity;
-using SuperChat.Models.Configs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +64,7 @@ namespace SuperChat
             //.AddEntityFrameworkStores<SuperChatDbContext>()
             //.AddDefaultTokenProviders();
 
-            var authenticationSettings = Configuration.GetSection("AuthenticationConfig").Get<AuthenticationSettings>();
+            //var authenticationSettings = Configuration.GetSection("AuthenticationConfig").Get<AuthenticationSettings>();
             //services.AddAuthentication(x =>
             //{
             //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

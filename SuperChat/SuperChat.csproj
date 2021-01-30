@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SuperChat.Core\SuperChat.Core.csproj" />
     <ProjectReference Include="..\SuperChat.Datamodel\SuperChat.Datamodel.csproj" />
   </ItemGroup>
 

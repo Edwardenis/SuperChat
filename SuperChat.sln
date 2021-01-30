@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperChat", "SuperChat\Supe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperChat.Datamodel", "SuperChat.Datamodel\SuperChat.Datamodel.csproj", "{3895EECE-0896-4D91-88BC-4795E6A52A62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperChat.Core", "SuperChat.Core\SuperChat.Core.csproj", "{1F6F1F7C-89F0-4C1B-8FD5-ADCB09F2D38C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3895EECE-0896-4D91-88BC-4795E6A52A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3895EECE-0896-4D91-88BC-4795E6A52A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3895EECE-0896-4D91-88BC-4795E6A52A62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F6F1F7C-89F0-4C1B-8FD5-ADCB09F2D38C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F6F1F7C-89F0-4C1B-8FD5-ADCB09F2D38C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F6F1F7C-89F0-4C1B-8FD5-ADCB09F2D38C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F6F1F7C-89F0-4C1B-8FD5-ADCB09F2D38C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
