@@ -23,6 +23,7 @@ namespace SuperChat.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
+        public string Name { get; set; }
         public string Username { get; set; }
 
         [TempData]
@@ -43,6 +44,7 @@ namespace SuperChat.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
+            Name = user.Name;
             Username = userName;
 
             Input = new InputModel

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SuperChat.Datamodel;
 using SuperChat.Datamodel.Entities;
+using SuperChat.Identity;
 using SuperChat.Models.Configs;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,8 @@ namespace SuperChat
         {
             #region IoC Config
             services.AddTransient<SuperChatDbContext>();
+            //Custom Claim factory
+            services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AppClaimsPrincipalFactory>();
             #endregion
 
             #region DbContext Config
@@ -42,6 +45,8 @@ namespace SuperChat
 
             #region Auth Config
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
+                .AddClaimsPrincipalFactory<AppClaimsPrincipalFactory>()
                 .AddEntityFrameworkStores<SuperChatDbContext>()
                 .AddDefaultTokenProviders();
 
