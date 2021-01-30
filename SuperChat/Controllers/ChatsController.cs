@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SuperChat.Controllers
 {
-    public class Chats : Controller
+    public class ChatsController : Controller
     {
         // GET: Chats
         public ActionResult Index()

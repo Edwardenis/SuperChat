@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SuperChat.Datamodel.Repositories
 {
@@ -46,7 +47,7 @@ namespace SuperChat.Datamodel.Repositories
 
             return list.Where(predicate);
         }
-        public virtual T GetById(int id, params Expression<Func<T, object>>[] includeProperties)
+        public virtual Task<T> GetById(int id, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> list = _dbSet.AsQueryable();
 
@@ -55,7 +56,7 @@ namespace SuperChat.Datamodel.Repositories
                 list = list.Include(includeProperty);
             }
 
-            return list.FirstOrDefault(x => x.Id == id);
+            return list.FirstOrDefaultAsync(x => x.Id == id);
         }
         public void Add(T entity)
         {
@@ -74,9 +75,9 @@ namespace SuperChat.Datamodel.Repositories
         {
             _dbSet.Remove(entity);
         }
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            T entity = GetById(id);
+            T entity = await GetById(id);
             _dbSet.Remove(entity);
         }
         public void Delete(params T[] entities)

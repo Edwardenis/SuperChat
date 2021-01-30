@@ -1,3 +1,5 @@
+using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SuperChat.BL.Validations;
 using SuperChat.Core.ConfigModels;
 using SuperChat.Datamodel.Contexts;
 using SuperChat.Datamodel.Entities;
@@ -37,8 +40,9 @@ namespace SuperChat.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
+            services.AddControllers()
+                //Adding Fluent Validation
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ChatRoomValidator>());
             #region Global Filters
             var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
@@ -58,7 +62,7 @@ namespace SuperChat.API
             services.AddDatamodelRegistry();
             #endregion
 
-            #region Adding Db Context And Auth 
+            #region Adding Auth 
 
             services.AddIdentity<AppUser, IdentityRole>(o => {
                 o.User.RequireUniqueEmail = false;
@@ -122,6 +126,10 @@ namespace SuperChat.API
                     }
                 });
             });
+            #endregion
+
+            #region AutoMapper Config
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             #endregion
         }
 

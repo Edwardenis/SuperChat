@@ -13,7 +13,7 @@ namespace SuperChat.Datamodel.IoC
         public static void AddDatamodelRegistry(this IServiceCollection services)
         {
             services.AddTransient(typeof(IRepository<>), typeof(BaseRepository<>));
-            services.AddTransient<IUnitOfWork<SuperChatDbContext>, SuperChatUnitOfWork>();
+            services.AddScoped<IUnitOfWork<SuperChatDbContext>, SuperChatUnitOfWork>();
         }
     }
 }
