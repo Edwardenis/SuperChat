@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SuperChat.Datamodel.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SuperChat.Data
+namespace SuperChat.Datamodel
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class SuperChatDbContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public SuperChatDbContext(DbContextOptions<SuperChatDbContext> options)
             : base(options)
         {
         }
