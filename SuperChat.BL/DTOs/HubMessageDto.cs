@@ -33,10 +33,11 @@ namespace SuperChat.BL.DTOs
                 if (!IsCommandMessage)
                     return string.Empty;
 
-                return MessageText.Split("=")[1];
+                return _commandParameterRegex.Match(MessageText).Value.ToLower();
             }
         }
 
-        private Regex _commandRegex = new Regex(@"(?<=\/)(.*?)(?=\=)");
+        private Regex _commandRegex = new Regex(@"(?<=\/)(?:(?!=).)*");
+        private Regex _commandParameterRegex = new Regex(@"(?<=\=)(.*?)$");
     }
 }

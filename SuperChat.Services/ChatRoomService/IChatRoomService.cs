@@ -9,6 +9,6 @@ namespace SuperChat.Services.ChatRoomService
 {
     public interface IChatRoomService
     {
-        Task<List<ChatRoomDto>> GetChatRooms(int top = 10);
+        Task<IEnumerable<ChatRoomDto>> GetChatRooms(int top = 10);
     }
 }

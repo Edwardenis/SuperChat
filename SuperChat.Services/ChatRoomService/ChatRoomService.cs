@@ -20,7 +20,7 @@ namespace SuperChat.Services.ChatRoomService
             :base(uow, mapper)
         {
         }
-        public async Task<List<ChatRoomDto>> GetChatRooms(int top = 10)
+        public async Task<IEnumerable<ChatRoomDto>> GetChatRooms(int top = 10)
         {
             var allChatRooms = await _uow.GetRepository<ChatRoom>()
                 .Get()

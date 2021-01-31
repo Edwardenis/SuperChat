@@ -24,7 +24,7 @@ namespace SuperChat.Services.ChatService
             _stockRequesterService = stockRequesterService;
             _mapper = mapper;
         }
-        public async Task<List<ChatRoomMessageDto>> GetChatHistory(int chatRoomId, int top = 50)
+        public async Task<IEnumerable<ChatRoomMessageDto>> GetChatHistory(int chatRoomId, int top = 50)
         {
             var messages = await _chatRoomMessageService
                 .GetChatMessagesByChatRoom(chatRoomId, 
@@ -34,15 +34,21 @@ namespace SuperChat.Services.ChatService
             return messages;
         }
 
-        public async Task<ChatRoomMessageDto> ProcessHubMessage(HubMessageDto hubMessage)
+        public async Task<IEnumerable<ChatRoomMessageDto>> ProcessHubMessage(HubMessageDto hubMessage)
         {
             var chatRoomMessageDto = _mapper.Map<ChatRoomMessageDto>(hubMessage);
+            var responseMessages = new List<ChatRoomMessageDto>();
+            responseMessages.Add(chatRoomMessageDto);
             //
             if (hubMessage.IsCommandMessage)
             {
+                
                 switch (hubMessage.CommandName)
                 {
                     case SupportedBotCommands.STOCK:
+                        if (string.IsNullOrEmpty(hubMessage.CommandParameter))
+                            goto default;
+
                         var request = new StockRequest
                         {
                             StockCode = hubMessage.CommandParameter,
@@ -52,16 +58,27 @@ namespace SuperChat.Services.ChatService
                         await _stockRequesterService.RequestStock(request);
                         break;
                     default:
-
+                        var message = string.IsNullOrEmpty(hubMessage.CommandParameter)
+                            ? "Command parameter cannot be empty."
+                            : "Sorry but I don't know that command. Try something like /stock={symbol}";
+                        responseMessages
+                            .Add(new ChatRoomMessageDto
+                            {
+                                ChatRoomCode = hubMessage.ChatRoomCode,
+                                ChatRoomId = hubMessage.ChatRoomId,
+                                FromUser = "Bot",
+                                OcurredAt = DateTimeOffset.UtcNow,
+                                MessageText = message
+                            });
                         break;
                 }
-                return chatRoomMessageDto;
+
+                return responseMessages;
             }
             
-            chatRoomMessageDto = await _chatRoomMessageService.CreateMessage(chatRoomMessageDto);
+            await _chatRoomMessageService.CreateMessage(chatRoomMessageDto);
 
-
-            return chatRoomMessageDto;
+            return responseMessages;
         }
     }
 }

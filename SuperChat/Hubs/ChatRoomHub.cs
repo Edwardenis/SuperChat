@@ -33,17 +33,19 @@ namespace SuperChat.Hubs
                 MessageText = message,
                 OcurredAt = DateTimeOffset.UtcNow
             };
-            var createdMessageEntity = await _chatService.ProcessHubMessage(hubMessage);
+            var messagesToDisplay = await _chatService.ProcessHubMessage(hubMessage);
             //
             if (hubMessage.IsCommandMessage)
             {
                 //If it was a command message, only print message for sender
-                await Clients.Client(Context.ConnectionId).SendAsync(EventsConstants.RECEIVE_MESSAGE, createdMessageEntity);
+                foreach(var m in messagesToDisplay)
+                    await Clients.Client(Context.ConnectionId).SendAsync(EventsConstants.RECEIVE_MESSAGE, m);
             }
             else
             {
                 //Send message to group
-                await Clients.Group(chatRoomCode).SendAsync(EventsConstants.RECEIVE_MESSAGE, createdMessageEntity);
+                foreach (var m in messagesToDisplay)
+                    await Clients.Group(chatRoomCode).SendAsync(EventsConstants.RECEIVE_MESSAGE, m);
             }
         }
         public async Task AddToChatRoom(string groupName)

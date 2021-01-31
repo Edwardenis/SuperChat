@@ -36,7 +36,7 @@ namespace SuperChat.Services.ChatRoomMessageService
             return chatRoomMessageDto;
         }
 
-        public async Task<List<ChatRoomMessageDto>> GetChatMessagesByChatRoom(int chatRoomId, 
+        public async Task<IEnumerable<ChatRoomMessageDto>> GetChatMessagesByChatRoom(int chatRoomId, 
                                     int top = 50,
                                     bool ascending = true)
         {

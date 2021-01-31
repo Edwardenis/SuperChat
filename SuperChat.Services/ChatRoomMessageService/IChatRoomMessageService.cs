@@ -10,7 +10,7 @@ namespace SuperChat.Services.ChatRoomMessageService
 {
     public interface IChatRoomMessageService
     {
-        Task<List<ChatRoomMessageDto>> GetChatMessagesByChatRoom(int chatRoomId, int top = 50, bool ascending = true);
+        Task<IEnumerable<ChatRoomMessageDto>> GetChatMessagesByChatRoom(int chatRoomId, int top = 50, bool ascending = true);
         Task<ChatRoomMessageDto> CreateMessage(ChatRoomMessageDto chatRoomMessageDto);
     }
 }

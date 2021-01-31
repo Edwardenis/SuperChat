@@ -50,7 +50,7 @@
                         <template v-else>
                             <template v-for="message in reversedMessages" v-key="message.id">
                                 <template v-if="message.fromUser == currentUserEmail">
-                                    <div class="outgoing_msg">
+                                    <div class="outgoing_msg message-box">
                                         <div class="sent_msg">
                                             <p>
                                                 {{message.messageText}}
@@ -60,7 +60,7 @@
                                     </div>
                                 </template>
                                 <template v-else>
-                                    <div class="incoming_msg">
+                                    <div class="incoming_msg message-box">
                                         <div class="incoming_msg_img"> <img :src="getAvatarImage(message)" alt="sunil"> </div>
                                         <div class="received_msg">
                                             <div class="received_withd_msg">
@@ -114,7 +114,7 @@
             computed: {
                 reversedMessages: function () {
                     // `this` points to the vm instance
-                    return this.messages.slice(0, 51).reverse();
+                    return this.messages.slice(0, 50).reverse();
                 }
             },
             created: function () {
@@ -155,6 +155,7 @@
                 },
                 onMessageReceived: function (chatRoomMessageDto) {
                     this.messages.unshift(chatRoomMessageDto);
+                    this.scrollToLastMessage();
                     console.log("Recived message:")
                     console.log(chatRoomMessageDto)
                 },
@@ -162,6 +163,7 @@
                     console.log(chatRoomMessagesArray);
                     this.messages = chatRoomMessagesArray;
                     this.loadingMessages = false;
+                    this.scrollToLastMessage();
                 },
                 setActiveChatRoom: function (chatRoom) {
                     let previusChatRoom = this.activeChatRoom;
@@ -191,6 +193,15 @@
                         return 'https://avatars.dicebear.com/4.5/api/bottts/1.svg'
                     else
                         return 'https://avatars.dicebear.com/4.5/api/human/'+message.fromUser+'.svg'
+                },
+                scrollToLastMessage: function () {
+                    Vue.nextTick(function () {
+                        // DOM updated
+                        //Get last message element
+                        let messagesGroup = document.querySelectorAll(".message-box");
+                        let lastMessage = messagesGroup[messagesGroup.length - 1];
+                        lastMessage.scrollIntoView({ behavior: "smooth" });
+                    })
                 }
             }
         })

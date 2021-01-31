@@ -8,7 +8,7 @@ namespace SuperChat.Services.ChatService
 {
     public interface IChatService
     {
-        Task<List<ChatRoomMessageDto>> GetChatHistory(int chatRoomId, int top = 50);
-        Task<ChatRoomMessageDto> ProcessHubMessage(HubMessageDto hubMessage);
+        Task<IEnumerable<ChatRoomMessageDto>> GetChatHistory(int chatRoomId, int top = 50);
+        Task<IEnumerable<ChatRoomMessageDto>> ProcessHubMessage(HubMessageDto hubMessage);
     }
 }
