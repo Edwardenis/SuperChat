@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using GreenPipes;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -76,6 +77,7 @@ namespace SuperChat.Bot
                     cfg.Host(rabbitMqSettings.Host);
                     cfg.ReceiveEndpoint(rabbitMqSettings.StockRequestQueueName, x =>
                     {
+                        x.UseMessageRetry(c => c.Incremental(2, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(3)));
                         x.ConfigureConsumer<StockRequestConsumer>(ctx);
                     });
                 });

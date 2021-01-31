@@ -1,4 +1,5 @@
 using AutoMapper;
+using GreenPipes;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -84,6 +85,7 @@ namespace SuperChat
                     cfg.Host(rabbitMqSettings.Host);
                     cfg.ReceiveEndpoint(rabbitMqSettings.StockResponseQueueName, x =>
                     {
+                        x.UseMessageRetry(c => c.Incremental(2, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(3)));
                         x.ConfigureConsumer<StockResponseConsumer>(ctx);
                     });
                 });
