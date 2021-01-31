@@ -121,6 +121,7 @@
                 this.signalRConnection = new signalR
                     .HubConnectionBuilder()
                     .withUrl("/chatroomhub")
+                    .withAutomaticReconnect([0,2000,10000,30000,60000])
                     .build();
                 //
                 //Register all listeners

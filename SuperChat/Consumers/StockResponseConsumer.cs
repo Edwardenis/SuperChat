@@ -24,17 +24,28 @@ namespace SuperChat.Consumers
         public async Task Consume(ConsumeContext<StockResponse> context)
         {
             var connectionId = context.Message.ConnectionId;
-            var stockCode = context.Message.Stock.Symbol.ToUpper();
-            var closeValue = string.Format("${0:N2}%", context.Message.Stock.Close);
             var message = new ChatRoomMessageDto
             {
                 FromUser = "Bot",
                 OcurredAt = DateTimeOffset.UtcNow,
-                MessageText = $"{stockCode} quote is {closeValue} per share"
             };
+            //
+            if (context.Message.Stock == null)
+            {
+                //If stock = null, means could not find the stock with that stock code
+                message.MessageText = $"Sorry but could not found stock with code \"{context.Message.StockCode}\"";
+            }
+            else
+            {
+                var stockCode = context.Message.Stock.Symbol.ToUpper();
+                var closeValue = string.Format("${0:N2}%", context.Message.Stock.Close);
+                message.MessageText = $"{stockCode} quote is {closeValue} per share";
+                _logger.LogInformation("Stock request recieved {0}", stockCode);
+            }
+            
             await _hubContext.Clients.Client(connectionId).SendAsync(EventsConstants.RECEIVE_MESSAGE, message);
             //
-            _logger.LogInformation("Stock request recieved {0}", stockCode);
+            
         }
     }
 }

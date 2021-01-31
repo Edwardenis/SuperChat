@@ -8,6 +8,7 @@ namespace SuperChat.BL.QueueModels
     public class StockResponse
     {
         public string ConnectionId { get; set; }
+        public string StockCode { get; set; }
         public StockDto Stock { get; set; }
     }
 }

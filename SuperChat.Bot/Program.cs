@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using SuperChat.BL.QueueModels;
 using SuperChat.Bot.Consumers;
 using SuperChat.Core.ConfigModels;
+using SuperChat.Core.IoC;
 using SuperChat.Services.IoC;
 using System;
 using System.Configuration;
@@ -19,11 +20,16 @@ namespace SuperChat.Bot
         static async Task Main(string[] args)
         {
             //setup DI
+            var configuration = createConfiguration();
             var serviceCollection = new ServiceCollection()
                         .AddLogging();
+            #region Register IoC
+            serviceCollection.AddSingleton(configuration);
+            serviceCollection.AddCoreRegistry();
             serviceCollection.AddServicesRegistry();
+            #endregion
             //
-            var configuration = createConfiguration();
+            
 
             #region MassTransint Config
             //Set up maassTransit

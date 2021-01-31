@@ -20,6 +20,12 @@ namespace SuperChat.Core.IoC
             {
                 return getSettings<RabbitMqSettings>(serviceProvider, "RabbitMqSettings");
             });
+            //
+            services.AddSingleton((serviceProvider) =>
+            {
+                return getSettings<StockServiceSettings>(serviceProvider, "StockServiceSettings");
+            });
+            
         }
 
         private static T getSettings<T>(IServiceProvider serviceProvider, string sectionName)
