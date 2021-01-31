@@ -20,6 +20,9 @@ namespace SuperChat.BL.Mappers
                 .ReverseMap()
                 .ForMember(e => e.ChatRoom,
                                 cfg => cfg.Ignore());
+
+            CreateMap<ChatRoomMessageDto, HubMessageDto>()
+                .ReverseMap();
         }
     }
 }

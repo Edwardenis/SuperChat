@@ -1,4 +1,5 @@
-﻿using SuperChat.BL.DTOs;
+﻿using AutoMapper;
+using SuperChat.BL.DTOs;
 using SuperChat.BL.QueueModels;
 using SuperChat.Core.Constants;
 using SuperChat.Services.ChatRoomMessageService;
@@ -14,11 +15,14 @@ namespace SuperChat.Services.ChatService
     {
         private readonly IChatRoomMessageService _chatRoomMessageService;
         private readonly IStockRequesterService _stockRequesterService;
+        private readonly IMapper _mapper;
         public ChatService(IChatRoomMessageService chatRoomMessageService,
-                        IStockRequesterService stockRequesterService)
+                        IStockRequesterService stockRequesterService,
+                        IMapper mapper)
         {
             _chatRoomMessageService = chatRoomMessageService;
             _stockRequesterService = stockRequesterService;
+            _mapper = mapper;
         }
         public async Task<List<ChatRoomMessageDto>> GetChatHistory(int chatRoomId, int top = 50)
         {
@@ -32,6 +36,8 @@ namespace SuperChat.Services.ChatService
 
         public async Task<ChatRoomMessageDto> ProcessHubMessage(HubMessageDto hubMessage)
         {
+            var chatRoomMessageDto = _mapper.Map<ChatRoomMessageDto>(hubMessage);
+            //
             if (hubMessage.IsCommandMessage)
             {
                 switch (hubMessage.CommandName)
@@ -49,18 +55,9 @@ namespace SuperChat.Services.ChatService
 
                         break;
                 }
-                return null;
+                return chatRoomMessageDto;
             }
-
-            var chatRoomMessageDto = new ChatRoomMessageDto
-            {
-                ChatRoomId = hubMessage.ChatRoomId,
-                OcurredAt = hubMessage.OcurredAt,
-                MessageText = hubMessage.MessageText,
-                ChatRoomCode = hubMessage.ChatRoomCode,
-                FromUser = hubMessage.FromUser
-            };
-
+            
             chatRoomMessageDto = await _chatRoomMessageService.CreateMessage(chatRoomMessageDto);
 
 

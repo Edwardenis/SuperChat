@@ -34,9 +34,17 @@ namespace SuperChat.Hubs
                 OcurredAt = DateTimeOffset.UtcNow
             };
             var createdMessageEntity = await _chatService.ProcessHubMessage(hubMessage);
-            //If this is null, means that won't display this message on chat history.
-            if (createdMessageEntity != null)
+            //
+            if (hubMessage.IsCommandMessage)
+            {
+                //If it was a command message, only print message for sender
+                await Clients.Client(Context.ConnectionId).SendAsync(EventsConstants.RECEIVE_MESSAGE, createdMessageEntity);
+            }
+            else
+            {
+                //Send message to group
                 await Clients.Group(chatRoomCode).SendAsync(EventsConstants.RECEIVE_MESSAGE, createdMessageEntity);
+            }
         }
         public async Task AddToChatRoom(string groupName)
         {
