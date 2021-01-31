@@ -13,5 +13,8 @@ namespace SuperChat.BL.DTOs
         public string FromUser { get; set; }
 
         public string ChatRoomCode { get; set; }
+        public int ChatRoomId { get; set; }
+
+        public bool IsCommandMessage { get { return MessageText.StartsWith("/");  } }
     }
 }

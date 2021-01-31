@@ -24,15 +24,26 @@ namespace SuperChat.Services.ChatService
             return messages;
         }
 
-        public Task<ChatRoomMessageDto> ProcessHubMessage(HubMessageDto hubMessage)
+        public async Task<ChatRoomMessageDto> ProcessHubMessage(HubMessageDto hubMessage)
         {
-            return Task.FromResult(new ChatRoomMessageDto
+            if (hubMessage.IsCommandMessage)
             {
+                return null;
+            }
+
+            var chatRoomMessageDto = new ChatRoomMessageDto
+            {
+                ChatRoomId = hubMessage.ChatRoomId,
                 OcurredAt = hubMessage.OcurredAt,
                 MessageText = hubMessage.MessageText,
                 ChatRoomCode = hubMessage.ChatRoomCode,
                 FromUser = hubMessage.FromUser
-            });
+            };
+
+            chatRoomMessageDto = await _chatRoomMessageService.CreateMessage(chatRoomMessageDto);
+
+
+            return chatRoomMessageDto;
         }
     }
 }

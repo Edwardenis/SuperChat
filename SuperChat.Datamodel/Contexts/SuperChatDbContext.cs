@@ -17,6 +17,7 @@ namespace SuperChat.Datamodel.Contexts
         public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<ChatRoomMessage> ChatRoomMessages { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

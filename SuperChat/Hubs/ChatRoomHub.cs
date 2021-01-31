@@ -22,10 +22,11 @@ namespace SuperChat.Hubs
 
             await Clients.Client(Context.ConnectionId).SendAsync("ChatHistory", messages);
         }
-        public async Task SendMessage(string chatRoomCode, string user, string message)
+        public async Task SendMessage(string chatRoomCode, string chatRoomId, string user, string message)
         {
             var hubMessage = new HubMessageDto
             {
+                ChatRoomId = int.Parse(chatRoomId),
                 ChatRoomCode = chatRoomCode,
                 FromUser = user,
                 MessageText = message,

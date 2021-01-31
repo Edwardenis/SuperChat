@@ -22,6 +22,20 @@ namespace SuperChat.Services.ChatRoomMessageService
         {
         }
 
+        public async Task<ChatRoomMessageDto> CreateMessage(ChatRoomMessageDto chatRoomMessageDto)
+        {
+            var entity = _mapper.Map<ChatRoomMessage>(chatRoomMessageDto);
+            _uow
+                .GetRepository<ChatRoomMessage>()
+                .Add(entity);
+            //
+            await _uow.Commit();
+
+            chatRoomMessageDto.Id = entity.Id;
+
+            return chatRoomMessageDto;
+        }
+
         public async Task<List<ChatRoomMessageDto>> GetChatMessagesByChatRoom(int chatRoomId, 
                                     int top = 50,
                                     bool ascending = true)

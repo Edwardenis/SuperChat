@@ -17,7 +17,9 @@ namespace SuperChat.BL.Mappers
             CreateMap<ChatRoomMessage, ChatRoomMessageDto>()
                 .ForMember(dto => dto.ChatRoomCode,
                                 cfg => cfg.MapFrom(e => e.ChatRoom.Code))
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(e => e.ChatRoom,
+                                cfg => cfg.Ignore());
         }
     }
 }

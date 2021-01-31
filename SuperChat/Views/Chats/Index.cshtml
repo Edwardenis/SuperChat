@@ -67,50 +67,20 @@
                                                 <p>
                                                     {{message.messageText}}
                                                 </p>
-                                                <span class="time_date"> {{convertUtcToLocal(message.ocurredAt)}}</span>
+                                                <span class="time_date"> {{message.fromUser}} - {{convertUtcToLocal(message.ocurredAt)}}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </template>
                             </template>
-
-
-                            @*<div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                                <div class="received_msg">
-                                    <div class="received_withd_msg">
-                                        <p>Test, which is a new approach to have</p>
-                                        <span class="time_date"> 11:01 AM    |    Yesterday</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="outgoing_msg">
-                                <div class="sent_msg">
-                                    <p>Apollo University, Delhi, India Test</p>
-                                    <span class="time_date"> 11:01 AM    |    Today</span>
-                                </div>
-                            </div>
-                            <div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                                <div class="received_msg">
-                                    <div class="received_withd_msg">
-                                        <p>
-                                            We work directly with our designers and suppliers,
-                                            and sell direct to you, which means quality, exclusive
-                                            products, at a price anyone can afford.
-                                        </p>
-                                        <span class="time_date"> 11:01 AM    |    Today</span>
-                                    </div>
-                                </div>
-                            </div>*@
                         </template>
                     </template>
                 </div>
                 <div class="type_msg">
                     <div class="input_msg_write">
                         <form v-on:submit.prevent="sendMessage">
-                            <input v-model="messageInput" :disabled="!connectionIsActive" type="text" class="write_msg" placeholder="Type a message" />
-                            <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                            <input v-model="messageInput" :disabled="!connectionIsActive || !activeChatRoom" type="text" class="write_msg" placeholder="Type a message" />
+                            <button class="msg_send_btn" :disabled="!connectionIsActive || !activeChatRoom" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
                         </form>
                     </div>
                 </div>
@@ -167,11 +137,12 @@
                     if (!this.messageInput)
                         return;
 
+                    let chatRoomId = this.activeChatRoom.id;
                     let chatRoomCode = this.activeChatRoom.code;
                     let userEmail = this.currentUserEmail;
                     let message = this.messageInput;
 
-                    this.signalRConnection.invoke("SendMessage", chatRoomCode, userEmail, message)
+                    this.signalRConnection.invoke("SendMessage", chatRoomCode, ""+chatRoomId, userEmail, message)
                         .catch(function (err) {
                         return console.error(err.toString());
                         })
