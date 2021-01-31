@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SuperChat.BL.Mappers;
+using SuperChat.Consumers;
 using SuperChat.Core.ConfigModels;
 using SuperChat.Core.IoC;
 using SuperChat.Datamodel;
@@ -77,9 +78,14 @@ namespace SuperChat
             var rabbitMqSettings = Configuration.GetSection("RabbitMqSettings").Get<RabbitMqSettings>();
             services.AddMassTransit(config =>
             {
+                config.AddConsumer<StockResponseConsumer>();
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
                     cfg.Host(rabbitMqSettings.Host);
+                    cfg.ReceiveEndpoint(rabbitMqSettings.StockResponseQueueName, x =>
+                    {
+                        x.ConfigureConsumer<StockResponseConsumer>(ctx);
+                    });
                 });
             });
 

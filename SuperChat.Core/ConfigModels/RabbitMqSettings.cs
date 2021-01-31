@@ -8,5 +8,6 @@ namespace SuperChat.Core.ConfigModels
     {
         public string Host { get; set; }
         public string StockRequestQueueName { get; set; }
+        public string StockResponseQueueName { get; set; }
     }
 }

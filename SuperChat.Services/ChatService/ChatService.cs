@@ -41,7 +41,7 @@ namespace SuperChat.Services.ChatService
                         {
                             StockCode = hubMessage.CommandParameter,
                             RequestedBy = hubMessage.FromUser,
-                            ConnectionId = hubMessage.CommandName
+                            ConnectionId = hubMessage.ConnectionId
                         };
                         await _stockRequesterService.RequestStock(request);
                         break;

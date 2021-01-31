@@ -20,7 +20,7 @@ namespace SuperChat.Hubs
         {
             var messages = await _chatService.GetChatHistory(int.Parse(chatRoomId));
 
-            await Clients.Client(Context.ConnectionId).SendAsync("ChatHistory", messages);
+            await Clients.Client(Context.ConnectionId).SendAsync(EventsConstants.CHAT_HISTORY, messages);
         }
         public async Task SendMessage(string chatRoomCode, string chatRoomId, string user, string message)
         {
@@ -36,7 +36,7 @@ namespace SuperChat.Hubs
             var createdMessageEntity = await _chatService.ProcessHubMessage(hubMessage);
             //If this is null, means that won't display this message on chat history.
             if (createdMessageEntity != null)
-                await Clients.Group(chatRoomCode).SendAsync("ReceiveMessage", createdMessageEntity);
+                await Clients.Group(chatRoomCode).SendAsync(EventsConstants.RECEIVE_MESSAGE, createdMessageEntity);
         }
         public async Task AddToChatRoom(string groupName)
         {

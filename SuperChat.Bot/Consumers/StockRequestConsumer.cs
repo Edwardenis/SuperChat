@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Logging;
+using SuperChat.BL.DTOs;
 using SuperChat.BL.QueueModels;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,16 @@ namespace SuperChat.Bot.Consumers
         {
             var stockCode = context.Message.StockCode;
 
+            var stockResponse = new StockResponse
+            {
+                ConnectionId = context.Message.ConnectionId,
+                Stock = new StockDto
+                {
+                    Close = "125.362",
+                    Symbol = stockCode
+                }
+            };
+            context.Publish<StockResponse>(stockResponse);
             _logger.LogInformation("Stock request recieved {0}", stockCode);
             return Task.CompletedTask;
         }

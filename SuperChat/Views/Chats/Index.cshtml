@@ -61,7 +61,7 @@
                                 </template>
                                 <template v-else>
                                     <div class="incoming_msg">
-                                        <div class="incoming_msg_img"> <img :src="'https://avatars.dicebear.com/4.5/api/human/'+message.fromUser+'.svg'" alt="sunil"> </div>
+                                        <div class="incoming_msg_img"> <img :src="getAvatarImage(message)" alt="sunil"> </div>
                                         <div class="received_msg">
                                             <div class="received_withd_msg">
                                                 <p>
@@ -75,6 +75,7 @@
                             </template>
                         </template>
                     </template>
+                    <h2 v-else>Please select a chatroom</h2>
                 </div>
                 <div class="type_msg">
                     <div class="input_msg_write">
@@ -153,6 +154,8 @@
                 },
                 onMessageReceived: function (chatRoomMessageDto) {
                     this.messages.unshift(chatRoomMessageDto);
+                    console.log("Recived message:")
+                    console.log(chatRoomMessageDto)
                 },
                 onChatHistoryArrive: function (chatRoomMessagesArray) {
                     console.log(chatRoomMessagesArray);
@@ -181,6 +184,12 @@
                 },
                 convertUtcToLocal: function (dateTimeString) {
                     return moment.utc(dateTimeString).local().calendar();
+                },
+                getAvatarImage: function (message) {
+                    if (message.fromUser.toLowerCase() == "bot")
+                        return 'https://avatars.dicebear.com/4.5/api/bottts/1.svg'
+                    else
+                        return 'https://avatars.dicebear.com/4.5/api/human/'+message.fromUser+'.svg'
                 }
             }
         })
