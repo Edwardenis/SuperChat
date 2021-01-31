@@ -3,6 +3,7 @@ using SuperChat.Services.ChatRoomMessageService;
 using SuperChat.Services.ChatRoomService;
 using SuperChat.Services.ChatService;
 using SuperChat.Services.JWTFactory;
+using SuperChat.Services.RabbitMQ;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +17,8 @@ namespace SuperChat.Services.IoC
             services.AddScoped<IJwtFactory, JwtFactory>(); 
             services.AddScoped<IChatRoomService, ChatRoomService.ChatRoomService>(); 
             services.AddScoped<IChatRoomMessageService, ChatRoomMessageService.ChatRoomMessageService>();
-            services.AddScoped<IChatService, ChatService.ChatService>(); 
+            services.AddScoped<IChatService, ChatService.ChatService>();
+            services.AddScoped<IStockRequesterService, StockRequesterService>();
         }
     }
 }

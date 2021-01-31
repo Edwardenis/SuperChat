@@ -26,6 +26,7 @@ namespace SuperChat.Hubs
         {
             var hubMessage = new HubMessageDto
             {
+                ConnectionId = Context.ConnectionId,
                 ChatRoomId = int.Parse(chatRoomId),
                 ChatRoomCode = chatRoomCode,
                 FromUser = user,

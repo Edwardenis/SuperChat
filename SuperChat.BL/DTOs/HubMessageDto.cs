@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SuperChat.BL.DTOs
 {
@@ -14,7 +15,28 @@ namespace SuperChat.BL.DTOs
 
         public string ChatRoomCode { get; set; }
         public int ChatRoomId { get; set; }
+        public string ConnectionId { get; set; }
 
-        public bool IsCommandMessage { get { return MessageText.StartsWith("/");  } }
+        public bool IsCommandMessage { get { return _commandRegex.IsMatch(MessageText);  } }
+        public string CommandName { get {
+                if (!IsCommandMessage)
+                    return string.Empty;
+
+                return _commandRegex.Match(MessageText).Value.ToLower();
+            } 
+        }
+
+        public string CommandParameter
+        {
+            get
+            {
+                if (!IsCommandMessage)
+                    return string.Empty;
+
+                return MessageText.Split("=")[1];
+            }
+        }
+
+        private Regex _commandRegex = new Regex(@"(?<=\/)(.*?)(?=\=)");
     }
 }

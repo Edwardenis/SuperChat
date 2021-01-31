@@ -13,10 +13,22 @@ namespace SuperChat.Core.IoC
         {
             services.AddSingleton((serviceProvider) =>
             {
-                var configuration = serviceProvider.GetService<IConfiguration>();
-                var settings = configuration.GetSection("AuthenticationConfig").Get<AuthenticationSettings>();
-                return settings;
+                return getSettings<AuthenticationSettings>(serviceProvider, "AuthenticationConfig");
+            });
+            //
+            services.AddSingleton((serviceProvider) =>
+            {
+                return getSettings<RabbitMqSettings>(serviceProvider, "RabbitMqSettings");
             });
         }
+
+        private static T getSettings<T>(IServiceProvider serviceProvider, string sectionName)
+        {
+            var configuration = serviceProvider.GetService<IConfiguration>();
+            var settings = configuration.GetSection(sectionName).Get<T>();
+            return settings;
+
+        }
+
     }
 }

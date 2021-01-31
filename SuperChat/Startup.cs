@@ -1,4 +1,5 @@
 using AutoMapper;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -72,6 +73,18 @@ namespace SuperChat
             services.AddAutoMapper(typeof(SuperChatProfile).Assembly);
             #endregion
 
+            #region MassTransit Config
+            var rabbitMqSettings = Configuration.GetSection("RabbitMqSettings").Get<RabbitMqSettings>();
+            services.AddMassTransit(config =>
+            {
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(rabbitMqSettings.Host);
+                });
+            });
+
+            services.AddMassTransitHostedService();
+            #endregion
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
