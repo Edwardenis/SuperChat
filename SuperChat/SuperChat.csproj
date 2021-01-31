@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />
@@ -21,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SuperChat.BL\SuperChat.BL.csproj" />
     <ProjectReference Include="..\SuperChat.Core\SuperChat.Core.csproj" />
     <ProjectReference Include="..\SuperChat.Datamodel\SuperChat.Datamodel.csproj" />
     <ProjectReference Include="..\SuperChat.Services\SuperChat.Services.csproj" />

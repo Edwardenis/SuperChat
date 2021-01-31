@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,12 +10,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using SuperChat.BL.Mappers;
 using SuperChat.Core.ConfigModels;
 using SuperChat.Core.IoC;
 using SuperChat.Datamodel;
 using SuperChat.Datamodel.Contexts;
 using SuperChat.Datamodel.Entities;
 using SuperChat.Datamodel.IoC;
+using SuperChat.Hubs;
 using SuperChat.Identity;
 using SuperChat.Services.IoC;
 using System;
@@ -48,6 +51,9 @@ namespace SuperChat
 
             #endregion
 
+            //SignalR
+            services.AddSignalR();
+
             #region DbContext Config
             services.AddDbContext<SuperChatDbContext>(op => op.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
             #endregion
@@ -61,8 +67,11 @@ namespace SuperChat
 
             services.AddAuthorization();
             #endregion
-            
-            
+
+            #region AutoMapper Config
+            services.AddAutoMapper(typeof(SuperChatProfile).Assembly);
+            #endregion
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -95,6 +104,7 @@ namespace SuperChat
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<ChatRoomHub>("/chatroomhub");
             });
         }
     }

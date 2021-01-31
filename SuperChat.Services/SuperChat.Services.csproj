@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="FluentValidation" Version="9.4.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SuperChat.BL\SuperChat.BL.csproj" />
     <ProjectReference Include="..\SuperChat.Core\SuperChat.Core.csproj" />
     <ProjectReference Include="..\SuperChat.Datamodel\SuperChat.Datamodel.csproj" />
   </ItemGroup>

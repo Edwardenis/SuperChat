@@ -11,7 +11,13 @@ namespace SuperChat.BL.Mappers
     {
         public SuperChatProfile()
         {
-            CreateMap<ChatRoom, ChatRoomDto>().ReverseMap();
+            CreateMap<ChatRoom, ChatRoomDto>()
+                .ReverseMap();
+
+            CreateMap<ChatRoomMessage, ChatRoomMessageDto>()
+                .ForMember(dto => dto.ChatRoomCode,
+                                cfg => cfg.MapFrom(e => e.ChatRoom.Code))
+                .ReverseMap();
         }
     }
 }

@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using SuperChat.BL.DTOs;
 using SuperChat.Identity;
+using SuperChat.Services.ChatRoomService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +13,23 @@ using System.Threading.Tasks;
 
 namespace SuperChat.Controllers
 {
+    [Authorize]
     public class ChatsController : Controller
     {
-        // GET: Chats
-        public ActionResult Index()
+        private readonly IChatRoomService _chatRoomService;
+        private readonly IMapper _mapper;
+        public ChatsController(IChatRoomService chatRoomService,
+                            IMapper mapper)
         {
-            var token = User.Identity.GetToken();
-
-            return View();
+            _chatRoomService = chatRoomService;
+            _mapper = mapper;
+        }
+        // GET: Chats
+        public async Task<ActionResult> Index()
+        {
+            var chatRooms = await _chatRoomService.GetChatRooms();
+            //
+            return View("Index", chatRooms);
         }
 
         // GET: Chats/Details/5
