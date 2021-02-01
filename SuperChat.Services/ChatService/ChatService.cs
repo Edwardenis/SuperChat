@@ -28,7 +28,7 @@ namespace SuperChat.Services.ChatService
         {
             var messages = await _chatRoomMessageService
                 .GetChatMessagesByChatRoom(chatRoomId, 
-                                    top: 50, 
+                                    top: top, 
                                     ascending: false);
 
             return messages;

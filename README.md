@@ -24,7 +24,7 @@ The app was built using:
     * If you ran the docker command above, you don't need to change this. but if you have your own RabbitMq instance this the setting you need to change:
     * **Host** (your amqp connectionstring to RabbitMq, ex: '*amqp://guest:guest@localhost:5672*')
 4. Set up **SuperChat** project as your start up project.
-5. Open de Nuget Package Manager Console and Select **SuperChat.Datamodel** as the default project
+5. Open the Nuget Package Manager Console and Select **SuperChat.Datamodel** as the default project
 6. Run update-database command
 ``` bash
   Update-Database
