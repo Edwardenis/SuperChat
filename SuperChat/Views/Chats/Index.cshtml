@@ -199,8 +199,11 @@
                         // DOM updated
                         //Get last message element
                         let messagesGroup = document.querySelectorAll(".message-box");
-                        let lastMessage = messagesGroup[messagesGroup.length - 1];
-                        lastMessage.scrollIntoView({ behavior: "smooth" });
+                        if (messagesGroup.length > 0) {
+                            let lastMessage = messagesGroup[messagesGroup.length - 1];
+                            lastMessage.scrollIntoView({ behavior: "smooth" });
+                        }
+                        
                     })
                 }
             }
