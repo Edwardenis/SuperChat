@@ -16,10 +16,10 @@ namespace SuperChat.Test
         [SetUp]
         public void Setup()
         {
-            _stockService = new StockService(new StockServiceSettings
-            {
-                Url = "https://stooq.com/q/l/?s={0}&f=sd2t2ohlcv&h&e=csv"
-            });
+            //_stockService = new StockService(new StockServiceSettings
+            //{
+            //    Url = "https://stooq.com/q/l/?s={0}&f=sd2t2ohlcv&h&e=csv"
+            //});
         }
 
         [TestCase("aapl.us")]
