@@ -60,7 +60,8 @@ namespace SuperChat.Services.Base
         {
             return _uow.GetRepository<TEntity>().Get(predicate,
                 page,
-                pageSize);
+                pageSize,
+                sortExpressions);
         }
 
         public Task<TEntity> GetById(int id)
