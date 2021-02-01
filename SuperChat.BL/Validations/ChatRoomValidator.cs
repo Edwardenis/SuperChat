@@ -36,9 +36,9 @@ namespace SuperChat.BL.Validations
 
         private async Task<bool> BeUnique(string chatRoomCode, CancellationToken arg2)
         {
-            var chatRoom = await _uow.GetRepository<ChatRoom>()
-                            .GetNoTracking(c => c.Code == chatRoomCode)
-                            .FirstOrDefaultAsync();
+            var chatRoom = (await _uow.GetRepository<ChatRoom>()
+                            .Get(c => c.Code == chatRoomCode, trackEntities: false))
+                            .FirstOrDefault();
 
             var chatRoomAlreadyExist = chatRoom != null;
 

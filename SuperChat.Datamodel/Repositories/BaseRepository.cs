@@ -4,6 +4,7 @@ using SuperChat.Datamodel.Contexts;
 using SuperChat.Datamodel.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -23,7 +24,7 @@ namespace SuperChat.Datamodel.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        public T First(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
+        public Task<T> First(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> list = _dbSet.AsQueryable();
 
@@ -31,21 +32,57 @@ namespace SuperChat.Datamodel.Repositories
             {
                 list = list.Include(includeProperty);
             }
-            return list.FirstOrDefault();
+            return list.FirstOrDefaultAsync();
         }
-        public IQueryable<T> Get(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> predicate = null,
+                int? page = null,
+                int? pageSize = null,
+                SortExpression<T> sortExpressions = null,
+                bool trackEntities = true,
+                params Expression<Func<T, object>>[] includeProperties)
         {
-            IQueryable<T> list = _dbSet.AsQueryable();
+            IQueryable<T> query = _dbSet.AsQueryable();
+
+            if (!trackEntities)
+                query = query.AsNoTracking();
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
 
             foreach (var includeProperty in includeProperties)
             {
-                list = list.Include(includeProperty);
+                query = query.Include(includeProperty);
             }
 
-            if (predicate is null)
-                return list;
+            if (sortExpressions != null)
+            {
+                IOrderedQueryable<T> orderedQuery = null;
+                
+                if (sortExpressions.SortDirection == ListSortDirection.Ascending)
+                {
+                    orderedQuery = query.OrderBy(sortExpressions.SortBy);
+                }
+                else
+                {
+                    orderedQuery = query.OrderByDescending(sortExpressions.SortBy);
+                }
+                    
 
-            return list.Where(predicate);
+                if (page != null)
+                {
+                    query = orderedQuery.Skip(((int)page - 1) * (int)pageSize);
+                }
+            }
+
+            if (pageSize != null)
+            {
+                query = query.Take((int)pageSize);
+            }
+
+
+            return await query.ToListAsync();
         }
         public virtual Task<T> GetById(int id, params Expression<Func<T, object>>[] includeProperties)
         {
@@ -119,20 +156,6 @@ namespace SuperChat.Datamodel.Repositories
         public virtual void Detached(T entity)
         {
             _context.Entry(entity).State = EntityState.Detached;
-        }
-        public IQueryable<T> GetNoTracking(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
-        {
-            IQueryable<T> list = _dbSet.AsQueryable().AsNoTracking();
-
-            foreach (var includeProperty in includeProperties)
-            {
-                list = list.Include(includeProperty);
-            }
-
-            if (predicate is null)
-                return list;
-
-            return list.Where(predicate);
         }
     }
 }

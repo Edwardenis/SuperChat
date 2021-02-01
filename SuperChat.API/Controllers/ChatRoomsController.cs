@@ -5,6 +5,7 @@ using SuperChat.BL.DTOs;
 using SuperChat.Datamodel.Contexts;
 using SuperChat.Datamodel.Entities;
 using SuperChat.Datamodel.UnitOfWork;
+using SuperChat.Services.ChatRoomService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,9 @@ namespace SuperChat.API.Controllers
 {
     public class ChatRoomsController : BaseApiController<ChatRoom, ChatRoomDto>
     {
-        public ChatRoomsController(IMapper mapper, 
-                                IUnitOfWork<SuperChatDbContext> uow, 
+        public ChatRoomsController(IChatRoomService service, 
                                 IValidatorFactory validationFactory) 
-            : base(mapper, uow, validationFactory)
+            : base(service, validationFactory)
         {
         }
     }

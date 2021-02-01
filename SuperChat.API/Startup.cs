@@ -17,9 +17,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SuperChat.BL.Validations;
 using SuperChat.Core.ConfigModels;
+using SuperChat.Core.IoC;
 using SuperChat.Datamodel.Contexts;
 using SuperChat.Datamodel.Entities;
 using SuperChat.Datamodel.IoC;
+using SuperChat.Services.IoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,7 +61,9 @@ namespace SuperChat.API
             #endregion
 
             #region IoC Registry
+            services.AddCoreRegistry();
             services.AddDatamodelRegistry();
+            services.AddOnlyEntityServicesRegistry();
             #endregion
 
             #region Adding Auth 

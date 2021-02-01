@@ -9,11 +9,14 @@ namespace SuperChat.Datamodel.Repositories
 {
     public interface IRepository<T> : IDisposable where T : class
     {
+        Task<IEnumerable<T>> Get(Expression<Func<T, bool>> predicate = null, 
+                int? page = null,
+                int? pageSize = null,
+                SortExpression<T> sortExpressions = null,
+                bool trackEntities = true,
+                params Expression<Func<T, object>>[] includeProperties);
 
-        IQueryable<T> Get(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties);
-        IQueryable<T> GetNoTracking(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties);
-
-        T First(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties);
+        Task<T> First(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties);
         Task<T> GetById(int id, params Expression<Func<T, object>>[] includeProperties);
 
         void Add(T entity);

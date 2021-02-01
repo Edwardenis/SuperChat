@@ -2,7 +2,18 @@
     ViewData["Title"] = "Home Page";
 }
 
+@using Microsoft.AspNetCore.Identity
+@using SuperChat.Datamodel.Entities
+@using SuperChat.Identity
+
+@inject SignInManager<AppUser> SignInManager
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <h4>If want to test the API to create more Chat Rooms or Create messages in a Chat room.</h4>
+        <h5>Use the following Bearer Token to call the API: </h5>
+        <p style="word-break: break-all;">@User.Identity.GetToken()</p>
+    }
 </div>

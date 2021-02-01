@@ -9,8 +9,6 @@ namespace SuperChat.API.Controllers.Base
 {
     public interface IBaseController
     {
-        Type TypeDto { get; set; }
-        IMapper _mapper { get; set; }
         IValidatorFactory _validationFactory { get; set; }
         //UnprocessableEntityObjectResult UnprocessableEntity(object error);
     }

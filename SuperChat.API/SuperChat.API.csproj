@@ -20,6 +20,7 @@
     <ProjectReference Include="..\SuperChat.BL\SuperChat.BL.csproj" />
     <ProjectReference Include="..\SuperChat.Core\SuperChat.Core.csproj" />
     <ProjectReference Include="..\SuperChat.Datamodel\SuperChat.Datamodel.csproj" />
+    <ProjectReference Include="..\SuperChat.Services\SuperChat.Services.csproj" />
   </ItemGroup>
 
 

@@ -76,7 +76,7 @@ namespace SuperChat.Services.ChatService
                 return responseMessages;
             }
             
-            await _chatRoomMessageService.CreateMessage(chatRoomMessageDto);
+            await _chatRoomMessageService.Create(chatRoomMessageDto);
 
             return responseMessages;
         }

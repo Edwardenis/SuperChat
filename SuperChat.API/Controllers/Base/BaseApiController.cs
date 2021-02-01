@@ -6,6 +6,7 @@ using SuperChat.Core.Basemodel.BaseEntity;
 using SuperChat.Datamodel.Contexts;
 using SuperChat.Datamodel.Repositories;
 using SuperChat.Datamodel.UnitOfWork;
+using SuperChat.Services.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,34 +21,25 @@ namespace SuperChat.API.Controllers.Base
          where TEntity : class, IBaseEntity
          where TEntityDto : class, IBaseEntityDto
     {
-        public IMapper _mapper { get; set; }
         public IValidatorFactory _validationFactory { get; set; }
+        protected readonly IBaseEntityService<TEntity, TEntityDto> _baseEntityService;
 
-        protected readonly IUnitOfWork<SuperChatDbContext> _uow;
-        protected readonly IRepository<TEntity> _repository;
-
-        public Type TypeDto { get; set; }
-
-        public BaseApiController(IMapper mapper, 
-                IUnitOfWork<SuperChatDbContext> uow,
+        public BaseApiController(IBaseEntityService<TEntity, TEntityDto> baseEntityService,
                 IValidatorFactory validationFactory)
         {
-            _mapper = mapper;
-            _uow = uow;
+            _baseEntityService = baseEntityService;
             _validationFactory = validationFactory;
-            _repository = _uow.GetRepository<TEntity>();
-            TypeDto = typeof(List<TEntityDto>);
         }
 
         /// <summary>
-        /// Get all by query options.
+        /// Get all
         /// </summary>
         /// <returns>A list of records.</returns>
         [HttpGet]
-        public virtual IActionResult Get()
+        public virtual async Task<IActionResult> Get()
         {
-            var list = _repository.Get();
-            return Ok(list);
+            var list = await _baseEntityService.Get();
+            return Ok(_baseEntityService.Map(list));
         }
 
 
@@ -59,16 +51,12 @@ namespace SuperChat.API.Controllers.Base
         [HttpGet("{id}")]
         public virtual async Task<IActionResult> GetById(int id)
         {
-            TEntity entity = await _repository.GetById(id);
+            TEntity entity = await _baseEntityService.GetById(id);
 
             if (entity is null)
                 return NotFound();
 
-            TEntity result = await Task.FromResult(entity);
-
-            TEntityDto dto = _mapper.Map<TEntityDto>(result);
-
-            return Ok(dto);
+            return Ok(_baseEntityService.Map(entity));
         }
 
         /// <summary>
@@ -78,12 +66,7 @@ namespace SuperChat.API.Controllers.Base
         [HttpPost]
         public virtual async Task<IActionResult> Post([FromBody] TEntityDto entityDto)
         {
-            TEntity entity = _mapper.Map<TEntity>(entityDto);
-
-            _repository.Add(entity);
-            await _uow.Commit();
-
-            entityDto = _mapper.Map<TEntityDto>(entity);
+            await _baseEntityService.Create(entityDto);
 
             return CreatedAtAction(WebRequestMethods.Http.Get, new { id = entityDto.Id }, entityDto);
         }
@@ -98,17 +81,11 @@ namespace SuperChat.API.Controllers.Base
             if (entityDto.Id != id)
                 return BadRequest();
 
-            TEntity entity = await _repository.GetById(id);
-            if (entity is null)
+            var dto = await _baseEntityService.Update(id, entityDto);
+            if (dto is null)
                 return NotFound();
 
-            _mapper.Map(entityDto, entity);
-
-            _repository.Update(entity);
-
-            await _uow.Commit();
-
-            return Ok(_mapper.Map(entity, entityDto));
+            return Ok(dto);
         }
 
 
@@ -120,17 +97,12 @@ namespace SuperChat.API.Controllers.Base
         [HttpDelete("{id}")]
         public virtual async Task<IActionResult> Delete(int id)
         {
-            TEntity entity = await _repository.GetById(id);
+            var deleteEntity = await _baseEntityService.Delete(id);
 
-            if (entity is null)
+            if (deleteEntity is null)
                 return NotFound();
 
-            _repository.Delete(entity);
-            await _uow.Commit();
-
-            TEntityDto entityDto = _mapper.Map<TEntityDto>(entity);
-
-            return Ok(entityDto);
+            return Ok(deleteEntity);
         }
 
     }

@@ -15,12 +15,17 @@ namespace SuperChat.Services.IoC
     {
         public static void AddServicesRegistry(this IServiceCollection services)
         {
+            services.AddOnlyEntityServicesRegistry();
             services.AddScoped<IJwtFactory, JwtFactory>(); 
-            services.AddScoped<IChatRoomService, ChatRoomService.ChatRoomService>(); 
-            services.AddScoped<IChatRoomMessageService, ChatRoomMessageService.ChatRoomMessageService>();
             services.AddScoped<IChatService, ChatService.ChatService>();
             services.AddScoped<IStockRequesterService, StockRequesterService>(); 
             services.AddScoped<IStockService, StockService>(); 
+        }
+
+        public static void AddOnlyEntityServicesRegistry(this IServiceCollection services)
+        {
+            services.AddScoped<IChatRoomService, ChatRoomService.ChatRoomService>();
+            services.AddScoped<IChatRoomMessageService, ChatRoomMessageService.ChatRoomMessageService>();            
         }
     }
 }

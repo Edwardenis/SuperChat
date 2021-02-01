@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SuperChat.Services.ChatRoomService
 {
-    public class ChatRoomService : BaseEntityService, IChatRoomService
+    public class ChatRoomService : BaseEntityService<ChatRoom, ChatRoomDto>, IChatRoomService
     {
         public ChatRoomService(IUnitOfWork<SuperChatDbContext> uow,
             IMapper mapper)
@@ -22,10 +22,7 @@ namespace SuperChat.Services.ChatRoomService
         }
         public async Task<IEnumerable<ChatRoomDto>> GetChatRooms(int top = 10)
         {
-            var allChatRooms = await _uow.GetRepository<ChatRoom>()
-                .Get()
-                .Take(top)
-                .ToListAsync();
+            var allChatRooms = await Get(page: 1, pageSize: top);
             var chatRoomsDto = _mapper.Map<List<ChatRoomDto>>(allChatRooms);
 
             return chatRoomsDto;
