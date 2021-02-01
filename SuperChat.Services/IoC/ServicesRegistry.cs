@@ -15,6 +15,7 @@ namespace SuperChat.Services.IoC
     {
         public static void AddServicesRegistry(this IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddOnlyEntityServicesRegistry();
             services.AddScoped<IJwtFactory, JwtFactory>(); 
             services.AddScoped<IChatService, ChatService.ChatService>();

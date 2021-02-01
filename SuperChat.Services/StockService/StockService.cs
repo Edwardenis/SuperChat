@@ -17,10 +17,10 @@ namespace SuperChat.Services.Stock
         private readonly StockServiceSettings _stockServiceSettings;
         private readonly HttpClient _httpClient;
         private bool disposed;
-        public StockService(StockServiceSettings stockServiceSettings)
+        public StockService(IHttpClientFactory httpClientFactory, StockServiceSettings stockServiceSettings)
         {
             _stockServiceSettings = stockServiceSettings;
-            _httpClient = new HttpClient();
+            _httpClient = httpClientFactory.CreateClient();
         }
 
         //Finalizer to dispose undisposed objects
