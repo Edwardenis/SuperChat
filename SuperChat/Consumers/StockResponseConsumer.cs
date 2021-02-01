@@ -30,7 +30,9 @@ namespace SuperChat.Consumers
                 OcurredAt = DateTimeOffset.UtcNow,
             };
             //
-            if (context.Message.Stock == null)
+            if (!context.Message.Success)
+                message.MessageText = $"Sorry but right now I'm having problems contacting my friend in the finantial office. Try again later.";
+            else if (context.Message.Stock == null)
             {
                 //If stock = null, means could not find the stock with that stock code
                 message.MessageText = $"Sorry but could not found stock with code \"{context.Message.StockCode}\"";
@@ -38,7 +40,7 @@ namespace SuperChat.Consumers
             else
             {
                 var stockCode = context.Message.Stock.Symbol.ToUpper();
-                var closeValue = string.Format("${0:N2}%", context.Message.Stock.Close);
+                var closeValue = string.Format("${0:N2}", context.Message.Stock.Close);
                 message.MessageText = $"{stockCode} quote is {closeValue} per share";
                 _logger.LogInformation("Stock request recieved {0}", stockCode);
             }

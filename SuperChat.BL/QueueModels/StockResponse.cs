@@ -10,5 +10,6 @@ namespace SuperChat.BL.QueueModels
         public string ConnectionId { get; set; }
         public string StockCode { get; set; }
         public StockDto Stock { get; set; }
+        public bool Success { get; set; }
     }
 }

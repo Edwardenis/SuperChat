@@ -23,7 +23,7 @@ namespace SuperChat.Bot
             //setup DI
             var configuration = createConfiguration();
             var serviceCollection = new ServiceCollection()
-                        .AddLogging();
+                        .AddLogging(c => c.AddConsole());
             #region Register IoC
             serviceCollection.AddSingleton(configuration);
             serviceCollection.AddCoreRegistry();
@@ -49,6 +49,7 @@ namespace SuperChat.Bot
             await busControl.StartAsync(new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
             try
             {
+                Console.WriteLine("Bot is Listening for request");
                 Console.WriteLine("Press enter to exit");
 
                 await Task.Run(() => Console.ReadLine());
