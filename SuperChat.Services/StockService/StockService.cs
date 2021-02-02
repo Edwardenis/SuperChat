@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using Microsoft.Extensions.Logging;
 using SuperChat.BL.DTOs;
 using SuperChat.Core.ConfigModels;
 using System;
@@ -12,57 +13,49 @@ using System.Threading.Tasks;
 
 namespace SuperChat.Services.Stock
 {
-    public class StockService : IStockService, IDisposable
+    public class StockService : IStockService
     {
         private readonly StockServiceSettings _stockServiceSettings;
-        private readonly HttpClient _httpClient;
-        private bool disposed;
-        public StockService(IHttpClientFactory httpClientFactory, StockServiceSettings stockServiceSettings)
+        private readonly IHttpClientFactory _httpClientFactory; 
+        private readonly ILogger<StockService> _logger;
+        public StockService(IHttpClientFactory httpClientFactory, 
+            StockServiceSettings stockServiceSettings,
+            ILogger<StockService> logger)
         {
             _stockServiceSettings = stockServiceSettings;
-            _httpClient = httpClientFactory.CreateClient();
-        }
-
-        //Finalizer to dispose undisposed objects
-        ~StockService()
-        {
-            Dispose(false);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-
-            if (disposing)
-            {
-                //Dispose managed objects
-                _httpClient.Dispose();
-            }
-            disposed = true;
+            _httpClientFactory = httpClientFactory;
+            _logger = logger;
         }
 
         public async Task<StockDto> GetStock(string stockCode)
         {
+            var httpClient = _httpClientFactory.CreateClient();
             var url = string.Format(_stockServiceSettings.Url, stockCode);
-            var httpResponse = await _httpClient.GetAsync(url);
+            var httpResponse = await httpClient.GetAsync(url);
             var text = await httpResponse.Content.ReadAsStringAsync();
-            using TextReader reader = new StringReader(text);
-            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            
-            var stock = csv.GetRecords<StockDto>()
-                        .FirstOrDefault();
-            //
-            //IF Close is N/D means the stockCode was not found. Return null
-            if (stock.Close == "N/D")
+
+            try
+            {
+                using TextReader reader = new StringReader(text);
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+                var stock = csv.GetRecords<StockDto>()
+                            .FirstOrDefault();
+                //
+                //IF Close is N/D means the stockCode was not found. Return null
+                if (stock.Close == "N/D")
+                    return null;
+
+                return stock;
+
+            }
+            catch (HeaderValidationException ex)
+            {
+                _logger.LogError(ex, "Stock web service did not responded propertly");
+                //Service did not respoded expected value
                 return null;
-            return stock;
+            }
+            
         }
     }
 }
